@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h1=item.name
+  p Location: #{item.location}
+  p Longitude: #{item.long}
+  p Latitude: #{item.lat}
+  p Description: #{item.des}
+
+  hr
+  div.btn-group
+    a.btn.btn-success(href='/item/edit/'+item._id) Update
+    a.btn.btn-danger.delete-item(href='#', item-id=item._id) Delete
+    br

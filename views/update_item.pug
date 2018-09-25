@@ -1,0 +1,15 @@
+extends layout
+block content
+  h1 #{title}
+  form(method='POST', action='/items/edit/'+item._id)
+    #form-group
+      label Name:
+      input.form-control(name='name', type='text', value=item.name)
+    #form-group
+      label Location:
+      input.form-control(name='location', type='text',value=item.location)
+    #form-group
+      label Description:
+      textarea.form-control(name='des')
+      br
+    input.btn.btn-primary(type='submit', value='Update')

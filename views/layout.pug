@@ -1,0 +1,103 @@
+doctype html
+html(lang='en')
+  head
+    title Geo Caching REST API
+    link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
+    link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.min.css')
+    link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/simple-sidebar.css')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+
+  body
+    #wrapper
+
+      #sidebar-wrapper
+        ul.sidebar-nav
+          li.sidebar-brand
+            a(href='#')
+              | GEO Caching REST API
+          li
+            a(href='/') Main Menu
+          li
+            a(href='/items/add') Create Item
+
+
+
+      #page-content-wrapper
+        .container-fluid
+          h1 Geo Caching REST API
+
+
+          //- p
+            | This template has a responsive menu toggling system. The menu will appear collapsed on smaller screens, and will appear non-collapsed on larger screens. When toggled using the button below, the menu will appear/disappear. On small screens, the page content will be pushed off canvas.
+          //- p
+            | Make sure to keep all page content within the
+            code #page-content-wrapper
+            | .
+          a#menu-toggle.btn.btn-info(href='#menu-toggle') Toggle Menu
+
+        .container
+            block content
+            br
+
+            div(id='map-div', style='height:300px;')
+
+            footer
+              p CopyRight &copy, 2018
+
+      block scripts
+          script.
+
+            function updatedList(items) {
+
+              window.markers.forEach(function(marker){
+                marker.setMap(null);
+                //clears any earlier markers on map
+              });
+
+              window.markers = [];
+              //initialize markers array here
+              // JSON.parse converts items string to an js object.
+              //For each item get coordinates, create marker and push to marker array
+              JSON.parse(items).forEach(function(item){
+                latLog = new window.googleLocal.maps.LatLng(item.lat, item.long);
+                marker = new window.googleLocal.maps.Marker({
+                  position: latLog,
+                  title: item.name,
+                  //map:window.map
+                });
+                //To add the marker to the map, call setMap();
+                marker.setMap(window.map);
+                window.markers.push(marker);
+              });
+
+              console.log('updatedList');
+
+            }
+      script(src='/bower_components/jquery/dist/jquery.min.js')
+      script(src='/bower_components/bootstrap/dist/js/bootstrap.bundle.min.js')
+      script(src='/js/main.js')
+      //Load Google Map API here with initMap function call
+      script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyCR7DA6hA3Bm5m9tpxeFP9eW_teXWD-qrw&callback=initMap', async='', defer='')
+
+
+      script.
+        $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+                  });
+          window.markers = [];
+
+
+          function initMap() {
+          console.log('initMap');
+          
+          window.googleLocal = google;
+
+          //make google globally available
+
+          //create map with given center position
+          map = new google.maps.Map(document.getElementById('map-div'), {
+          center: {lat: 32.4279, lng: 53.6880},
+          zoom: 3
+          });
+          }
